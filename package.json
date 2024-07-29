@@ -3,13 +3,17 @@
 	"version": "1.0.2",
 	"description": "",
 	"main": "src/index.js",
+	"type": "module",
 	"types": "src/index.d.ts",
 	"files": [
 		"src/**/*"
 	],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"pub:patch": "git add . && git commit -m 'patch' && npm version patch && npm publish"
+		"commit": "node scripts/commit.js",
+		"pub:patch": "npm run commit -- patch",
+		"pub:minor": "npm run commit -- minor",
+		"pub:major": "npm run commit -- major"
 	},
 	"keywords": [],
 	"author": "",
