@@ -1,13 +1,50 @@
+// index.d.ts
+
 declare module "@expensio/sharedlib" {
-	export { default as ApplicationError } from "./errors/ApplicationError.js";
-	export { default as AuthorizationError } from "./errors/AuthorizationError.js";
-	export { default as DatabaseError } from "./errors/DatabaseError.js";
-	export { default as NotFoundError } from "./errors/NotFoundError.js";
-	export { default as ValidationError } from "./errors/ValidationError.js";
-	export { default as OtpSendingError } from "./errors/otp/OtpSendingError.js";
-	export { default as RateLimitError } from "./errors/otp/RateLimitError.js";
-	export { default as AuthenticationError } from "./errors/AuthenticationError.js";
-	export { default as InternalServerError } from "./errors/InternalServerError.js";
-	export { default as errorHandlingMiddleware } from "./middlewares/errorHandlingMiddleware.js";
-	export { default as authMiddleware } from "./middlewares/authMiddleware.js";
+	export class ApplicationError extends Error {
+		constructor(message: string, statusCode: number);
+		name: string;
+		statusCode: number;
+	}
+
+	export class AuthorizationError extends ApplicationError {
+		constructor(message?: string);
+	}
+
+	export class DatabaseError extends ApplicationError {
+		constructor(message?: string);
+	}
+
+	export class NotFoundError extends ApplicationError {
+		constructor(message?: string);
+	}
+
+	export class ValidationError extends ApplicationError {
+		constructor(message?: string);
+	}
+
+	export class OtpSendingError extends ApplicationError {
+		constructor(message?: string);
+	}
+
+	export class RateLimitError extends ApplicationError {
+		constructor(message?: string);
+	}
+
+	export class AuthenticationError extends ApplicationError {
+		constructor(message?: string);
+	}
+
+	export class InternalServerError extends ApplicationError {
+		constructor(message?: string);
+	}
+
+	export function errorHandlingMiddleware(
+		err: any,
+		req: any,
+		res: any,
+		next: any
+	): void;
+
+	export function authMiddleware(req: any, res: any, next: any): void;
 }
