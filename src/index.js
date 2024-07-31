@@ -10,4 +10,4 @@ export { default as InternalServerError } from "./errors/InternalServerError.js"
 export { default as errorHandlingMiddleware } from "./middlewares/errorHandlingMiddleware.js";
 export { default as authMiddleware } from "./middlewares/authMiddleware.js";
 
-export { default as createLoggerInstance } from "./config/logger.js";
+export { initLogger, getLogger } from "./config/logger.js";
