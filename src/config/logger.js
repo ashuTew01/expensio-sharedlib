@@ -7,14 +7,16 @@ const logFormat = format.combine(
 	format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
 );
 
-const createLoggerInstance = (logDirectory) => {
+let logger;
+
+const initLogger = (logDirectory) => {
 	if (!fs.existsSync(logDirectory)) {
 		fs.mkdirSync(logDirectory, { recursive: true });
 	}
 
 	const logFilePath = path.join(logDirectory, "errors.log");
 
-	return createLogger({
+	logger = createLogger({
 		level: "debug", // set to 'debug' to capture (almost) all levels of logs
 		format: logFormat,
 		transports: [
@@ -35,4 +37,11 @@ const createLoggerInstance = (logDirectory) => {
 	});
 };
 
-export default createLoggerInstance;
+const getLogger = () => {
+	if (!logger) {
+		throw new Error("Logger not initialized. Call initLogger first.");
+	}
+	return logger;
+};
+
+export { initLogger, getLogger };

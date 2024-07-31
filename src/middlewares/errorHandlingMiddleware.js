@@ -1,6 +1,8 @@
-import logger from "../config/logger.js";
+import { getLogger } from "../config/logger.js";
 
 const errorHandlingMiddleware = (err, req, res, next) => {
+	const logger = getLogger();
+
 	logger.error(`${err.name}: ${err.message}`, {
 		url: req.originalUrl,
 		body: req.body,
