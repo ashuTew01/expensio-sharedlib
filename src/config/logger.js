@@ -44,4 +44,20 @@ const getLogger = () => {
 	return logger;
 };
 
-export { initLogger, getLogger };
+// Wrapper methods for different log levels
+const logInfo = (message) => {
+	const loggerInstance = getLogger();
+	loggerInstance.info(message);
+};
+
+const logWarning = (message) => {
+	const loggerInstance = getLogger();
+	loggerInstance.warn(message);
+};
+
+const logError = (message) => {
+	const loggerInstance = getLogger();
+	loggerInstance.error(message);
+};
+
+export { initLogger, getLogger, logInfo, logWarning, logError };

@@ -10,7 +10,13 @@ export { default as InternalServerError } from "./errors/InternalServerError.js"
 export { default as errorHandlingMiddleware } from "./middlewares/errorHandlingMiddleware.js";
 export { default as authMiddleware } from "./middlewares/authMiddleware.js";
 
-export { initLogger, getLogger } from "./config/logger.js";
+export {
+	initLogger,
+	getLogger,
+	logError,
+	logWarning,
+	logInfo,
+} from "./config/logger.js";
 export { EVENTS, EXCHANGES, ROUTING_KEYS } from "./config/eventConfig.js";
 export { publishEvent } from "./utils/publishEvent.js";
 export { subscribeEvent } from "./utils/subscribeEvent.js";
