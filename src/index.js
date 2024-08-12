@@ -11,3 +11,4 @@ export { default as errorHandlingMiddleware } from "./middlewares/errorHandlingM
 export { default as authMiddleware } from "./middlewares/authMiddleware.js";
 
 export { initLogger, getLogger } from "./config/logger.js";
+export { EVENTS, EXCHANGES, ROUTING_KEYS } from "./config/eventConfig.js";
