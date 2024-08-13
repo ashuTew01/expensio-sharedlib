@@ -1,10 +1,14 @@
-import { channel } from "../config/rabbitmq.js";
 import { EXCHANGES, ROUTING_KEYS } from "../config/eventConfig.js";
 import { logError, logInfo, logWarning } from "../config/logger.js";
 
 const MAX_RETRIES = 5;
 
-export const subscribeEvent = async (eventName, queueName, onMessage) => {
+export const subscribeEvent = async (
+	eventName,
+	queueName,
+	onMessage,
+	channel
+) => {
 	try {
 		const exchangeName = EXCHANGES[eventName.split("_")[0]]; // Derive exchange name (e.g., USER for USER_DELETED)
 		const routingKey = ROUTING_KEYS[eventName]; // Get the routing key from the EVENTS constant

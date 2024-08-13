@@ -1,7 +1,6 @@
-import { channel } from "../config/rabbitmq.js"; // Assuming channel is configured in the sharedlib
 import { EXCHANGES, ROUTING_KEYS } from "../config/eventConfig.js";
 
-export const publishEvent = async (eventName, data) => {
+export const publishEvent = async (eventName, data, channel) => {
 	try {
 		const exchangeName = EXCHANGES[eventName.split("_")[0]]; // Derive exchange name (e.g., USER for USER_DELETED)
 		const routingKey = ROUTING_KEYS[eventName]; // Get the routing key from the EVENTS constant
