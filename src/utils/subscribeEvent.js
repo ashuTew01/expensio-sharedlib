@@ -2,6 +2,7 @@ import { EXCHANGES, ROUTING_KEYS } from "../config/eventConfig.js";
 import { logError, logInfo, logWarning } from "../config/logger.js";
 
 const MAX_RETRIES = 5;
+const ACK_TIMEOUT = 30000; // 30 seconds timeout
 
 export const subscribeEvent = async (
 	eventName,
@@ -49,24 +50,53 @@ export const subscribeEvent = async (
 		// Consume the messages
 		channel.consume(q.queue, async (msg) => {
 			if (msg !== null) {
+				const retryCount = msg.properties.headers["x-retry-count"] || 0;
+				let timeoutHandler;
+
 				try {
-					const retryCount = msg.properties.headers["x-retry-count"] || 0;
+					// Set up a timeout to automatically nack the message after 30 seconds
+					timeoutHandler = setTimeout(async () => {
+						logWarning(
+							`Message from event '${eventName}' timed out after ${ACK_TIMEOUT / 1000} seconds. Requeuing... (${retryCount + 1}/${MAX_RETRIES})`
+						);
+
+						if (retryCount < MAX_RETRIES) {
+							// Increment retry count and requeue the message
+							channel.nack(msg, false, false); // Reject the original message
+
+							await channel.sendToQueue(q.queue, msg.content, {
+								headers: { "x-retry-count": retryCount + 1 },
+								persistent: true,
+							});
+						} else {
+							// Max retries reached, send to DLX
+							logError(
+								`Message from event '${eventName}' failed after ${MAX_RETRIES} retries. Sending to DLX.`
+							);
+							channel.nack(msg, false, false); // Reject without requeueing
+						}
+					}, ACK_TIMEOUT);
 
 					// Process the message
 					await onMessage(JSON.parse(msg.content.toString()));
+
+					// Clear the timeout if the message is processed successfully
+					clearTimeout(timeoutHandler);
+
 					channel.ack(msg); // Acknowledge message upon successful processing
 				} catch (error) {
-					const retryCount = msg.properties.headers["x-retry-count"] || 0;
+					clearTimeout(timeoutHandler);
 
 					if (retryCount < MAX_RETRIES) {
 						logWarning(
 							`Error processing message from event '${eventName}': ${error.message}. Requeuing... (${retryCount + 1}/${MAX_RETRIES})`
 						);
 
-						// Requeue the message with incremented retry count
+						// Manually requeue the message with incremented retry count
 						channel.nack(msg, false, false); // Reject the original message
 						await channel.sendToQueue(q.queue, msg.content, {
 							headers: { "x-retry-count": retryCount + 1 },
+							persistent: true,
 						});
 					} else {
 						logError(
