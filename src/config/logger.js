@@ -14,7 +14,9 @@ const initLogger = (logDirectory) => {
 		fs.mkdirSync(logDirectory, { recursive: true });
 	}
 
-	const logFilePath = path.join(logDirectory, "errors.log");
+	const errorLogPath = path.join(logDirectory, "error.log");
+	const warnLogPath = path.join(logDirectory, "warn.log");
+	const infoLogPath = path.join(logDirectory, "info.log");
 
 	logger = createLogger({
 		level: "debug", // set to 'debug' to capture (almost) all levels of logs
@@ -25,8 +27,26 @@ const initLogger = (logDirectory) => {
 				format: format.combine(format.colorize(), logFormat),
 			}),
 			new transports.File({
-				filename: logFilePath,
-				level: "debug",
+				filename: errorLogPath,
+				level: "error",
+				format: format.combine(
+					format.uncolorize(),
+					format.timestamp(),
+					format.json()
+				),
+			}),
+			new transports.File({
+				filename: warnLogPath,
+				level: "warn",
+				format: format.combine(
+					format.uncolorize(),
+					format.timestamp(),
+					format.json()
+				),
+			}),
+			new transports.File({
+				filename: infoLogPath,
+				level: "info",
 				format: format.combine(
 					format.uncolorize(),
 					format.timestamp(),
