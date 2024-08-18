@@ -98,8 +98,11 @@ export const subscribeEvent = async (
 						}
 					}, ACK_TIMEOUT);
 
-					// Process the message
-					await onMessage(JSON.parse(msg.content.toString()));
+					// Process the message. Send headers so that the person can know the retry count.
+					await onMessage({
+						data: JSON.parse(msg.content.toString()),
+						headers: msg.properties.headers,
+					});
 
 					// Clear the timeout if the message is processed successfully
 					clearTimeout(timeoutHandler);
