@@ -13,7 +13,7 @@ export const subscribeEvent = async (
 	try {
 		const validEvents = Object.values(EVENTS);
 
-		// Check if the eventName is valid
+		// Check if the eventName is valid.
 		if (!validEvents.includes(eventName)) {
 			const availableEvents = validEvents.join(", ");
 			logError(
