@@ -5,7 +5,7 @@ export const publishEvent = async (eventName, data, channel) => {
 	try {
 		const validEvents = Object.values(EVENTS);
 
-		// Check if the eventName is valid
+		// Check if the eventName is valid.
 		if (!validEvents.includes(eventName)) {
 			const availableEvents = validEvents.join(", ");
 			throw new Error(
