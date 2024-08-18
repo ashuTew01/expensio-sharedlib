@@ -4,7 +4,7 @@ import { logError, logInfo } from "../config/logger.js";
 export const publishEvent = async (eventName, data, channel) => {
 	try {
 		const validEvents = Object.values(EVENTS);
-
+		console.log("PublishEvent Log: 1");
 		// Check if the eventName is valid.
 		if (!validEvents.includes(eventName)) {
 			const availableEvents = validEvents.join(", ");
@@ -12,9 +12,11 @@ export const publishEvent = async (eventName, data, channel) => {
 				`Invalid event name '${eventName}'. Available events are: ${availableEvents}`
 			);
 		}
+		console.log("PublishEvent Log: 2");
 
 		const exchangeName = EXCHANGES[eventName.split("_")[0]]; // Derive exchange name (e.g., USER for USER_DELETED)
 		const routingKey = ROUTING_KEYS[eventName]; // Get the routing key from the EVENTS constant
+		console.log("PublishEvent Log: 3");
 
 		if (!exchangeName) {
 			logError(
@@ -29,6 +31,7 @@ export const publishEvent = async (eventName, data, channel) => {
 			);
 			throw new Error(`No routing key defined for event: ${eventName}`);
 		}
+		console.log("PublishEvent Log: 4");
 
 		// Ensure the exchange exists
 		await channel.assertExchange(exchangeName, "topic", { durable: true });
@@ -39,11 +42,14 @@ export const publishEvent = async (eventName, data, channel) => {
 			routingKey,
 			Buffer.from(JSON.stringify(data))
 		);
+		console.log("PublishEvent Log: 5");
 
 		logInfo(
 			`Event '${eventName}' published to exchange ${exchangeName} with routing key ${routingKey}`
 		);
 	} catch (error) {
+		console.log("PublishEvent Log: 6");
+
 		logError(
 			`Failed to publish event '${eventName}' to exchange ${exchangeName}:`,
 			error
