@@ -13,7 +13,7 @@ export const subscribeEvent = async (
 	try {
 		const validEvents = Object.values(EVENTS);
 
-		// Check if the eventName is valid.
+		// Check if the eventName is valid
 		if (!validEvents.includes(eventName)) {
 			const availableEvents = validEvents.join(", ");
 			throw new Error(
@@ -80,12 +80,11 @@ export const subscribeEvent = async (
 
 						if (retryCount < MAX_RETRIES) {
 							// Increment retry count and requeue the message
-							channel.nack(msg, false, false); // Reject the original message
-
 							await channel.sendToQueue(q.queue, msg.content, {
 								headers: { "x-retry-count": retryCount + 1 },
 								persistent: true,
 							});
+							channel.nack(msg, false, false); // Reject the original message
 						} else {
 							// Max retries reached, send to DLX
 							logError(
@@ -114,11 +113,11 @@ export const subscribeEvent = async (
 						);
 
 						// Manually requeue the message with incremented retry count
-						channel.nack(msg, false, false); // Reject the original message
 						await channel.sendToQueue(q.queue, msg.content, {
 							headers: { "x-retry-count": retryCount + 1 },
 							persistent: true,
 						});
+						channel.nack(msg, false, false); // Reject the original message
 					} else {
 						logError(
 							`Message from event '${eventName}' failed after ${MAX_RETRIES} retries. Sending to DLX.`
