@@ -38,10 +38,6 @@ export const subscribeEvent = async (
 			throw new Error(`No routing key defined for event: ${eventName}`);
 		}
 
-		logInfo(
-			`Event Received: ${eventName}. Exchange: ${exchangeName}, Routing Key: ${routingKey} \non queue: ${queueName}`
-		);
-
 		// Ensure the exchange exists
 		await channel.assertExchange(exchangeName, "topic", { durable: true });
 
@@ -71,6 +67,9 @@ export const subscribeEvent = async (
 
 		// Consume the messages
 		channel.consume(q.queue, async (msg) => {
+			logInfo(
+				`Event Received: ${eventName}. Exchange: ${exchangeName}, Routing Key: ${routingKey} \non queue: ${queueName}.`
+			);
 			if (msg !== null) {
 				let timeoutHandler;
 
