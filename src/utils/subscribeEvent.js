@@ -16,9 +16,6 @@ export const subscribeEvent = async (
 		// Check if the eventName is valid.
 		if (!validEvents.includes(eventName)) {
 			const availableEvents = validEvents.join(", ");
-			logError(
-				`Invalid event name '${eventName}'. Available events are: ${availableEvents}`
-			);
 			throw new Error(
 				`Invalid event name '${eventName}'. Available events are: ${availableEvents}`
 			);
