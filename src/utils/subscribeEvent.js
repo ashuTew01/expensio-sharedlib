@@ -14,10 +14,18 @@ export const subscribeEvent = async (
 		const exchangeName = EXCHANGES[eventName.split("_")[0]]; // Derive exchange name (e.g., USER for USER_DELETED)
 		const routingKey = ROUTING_KEYS[eventName]; // Get the routing key from the EVENTS constant
 
-		if (!exchangeName || !routingKey) {
-			throw new Error(
-				`No exchange or routing key defined for event: ${eventName}`
+		if (!exchangeName) {
+			logError(
+				`Exchange name for event '${eventName}' not found. Available exchanges: ${JSON.stringify(EXCHANGES)}`
 			);
+			throw new Error(`No exchange defined for event: ${eventName}`);
+		}
+
+		if (!routingKey) {
+			logError(
+				`Routing key for event '${eventName}' not found. Available routing keys: ${JSON.stringify(ROUTING_KEYS)}`
+			);
+			throw new Error(`No routing key defined for event: ${eventName}`);
 		}
 
 		// Ensure the exchange exists
