@@ -11,6 +11,19 @@ export const subscribeEvent = async (
 	channel
 ) => {
 	try {
+		const validEvents = Object.values(EVENTS);
+
+		// Check if the eventName is valid
+		if (!validEvents.includes(eventName)) {
+			const availableEvents = validEvents.join(", ");
+			logError(
+				`Invalid event name '${eventName}'. Available events are: ${availableEvents}`
+			);
+			throw new Error(
+				`Invalid event name '${eventName}'. Available events are: ${availableEvents}`
+			);
+		}
+
 		const exchangeName = EXCHANGES[eventName.split("_")[0]]; // Derive exchange name (e.g., USER for USER_DELETED)
 		const routingKey = ROUTING_KEYS[eventName]; // Get the routing key from the EVENTS constant
 
