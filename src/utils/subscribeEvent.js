@@ -1,4 +1,4 @@
-import { EXCHANGES, ROUTING_KEYS } from "../config/eventConfig.js";
+import { EXCHANGES, ROUTING_KEYS, EVENTS } from "../config/eventConfig.js";
 import { logError, logInfo, logWarning } from "../config/logger.js";
 
 const MAX_RETRIES = 5;
