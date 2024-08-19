@@ -47,7 +47,7 @@ declare module "@expensio/sharedlib" {
 	export function logInfo(message: string): void;
 
 	// Event Config
-	export const EVENTS: { [key: string]: string };
+	// export const EVENTS: { [key: string]: string };
 	export const EXCHANGES: { [key: string]: string };
 	export const ROUTING_KEYS: { [key: string]: string };
 
