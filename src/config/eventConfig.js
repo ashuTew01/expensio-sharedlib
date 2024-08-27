@@ -4,6 +4,7 @@
  * @property {string} USER_DELETION_FAILED
  * @property {string} USER_DELETION_UNDONE
  * @property {string} EXPENSE_CREATED
+ * @property {string} EXPENSE_DELETED
  */
 
 /** @type {Events} */
@@ -12,6 +13,7 @@ export const EVENTS = {
 	USER_DELETION_FAILED: "USER_DELETION_FAILED",
 	USER_DELETION_UNDONE: "USER_DELETION_UNDONE",
 	EXPENSE_CREATED: "EXPENSE_CREATED",
+	EXPENSE_DELETED: "EXPENSE_DELETED",
 };
 
 /**
@@ -33,6 +35,7 @@ export const EXCHANGES = {
  * @property {string} USER_DELETION_FAILED
  * @property {string} USER_DELETION_UNDONE
  * @property {string} EXPENSE_CREATED
+ * @property {string} EXPENSE_DELETED
  */
 
 /** @type {RoutingKeys} */
@@ -41,5 +44,6 @@ export const ROUTING_KEYS = {
 	USER_DELETION_FAILED: "user.deletion.failed",
 	USER_DELETION_UNDONE: "user.deletion.undone",
 	EXPENSE_CREATED: "expense.created",
+	EXPENSE_DELETED: "expense.deleted",
 	// add new routing keys here
 };
