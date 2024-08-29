@@ -1,18 +1,18 @@
 const eventNames = [
-	//user events
+	//user events...
 	"USER_DELETED",
 	"USER_DELETION_FAILED",
 	"USER_DELETION_UNDONE",
 
-	//expense events
+	//expense events...
 	"EXPENSE_CREATED",
 	"EXPENSE_DELETED",
 
-	//income events
+	//income events...
 	"INCOME_CREATED",
 	"INCOME_DELETED",
 
-	//financial data events
+	//financial data events...
 	"FINANCIALDATA_UPDATED_EXPENSE",
 	"FINANCIALDATA_UPDATED_INCOME",
 ];
@@ -27,7 +27,7 @@ export const EXCHANGES = {
 	EXPENSE: "expense-events",
 	FINANCIALDATA: "financial-data-events",
 	INCOME: "income-events",
-	// add new exchanges here
+	// Add new exchanges here
 };
 
 export const ROUTING_KEYS = eventNames.reduce((keys, event) => {
