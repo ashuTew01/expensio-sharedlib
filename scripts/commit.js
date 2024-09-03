@@ -9,6 +9,7 @@ try {
 	execSync("git add .", { stdio: "inherit" });
 
 	execSync(`git commit -m "${commitMessage}"`, { stdio: "inherit" });
+	execSync(`git push`, { stdio: "inherit" });
 
 	execSync(`npm version ${versionType}`, { stdio: "inherit" });
 
