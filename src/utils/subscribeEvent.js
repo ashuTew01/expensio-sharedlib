@@ -105,7 +105,7 @@ export const subscribeEvent = async (
 		logInfo(`Subscribed to event '${eventName}' on queue '${queueName}'.`);
 	} catch (error) {
 		logError(
-			`Failed to subscribe to event '${eventName}' on queue '${queueName}': ${error.message}`
+			`Failed to subscribe to event '${eventName}' on queue '${queueName}': ${error.message}.`
 		);
 		throw error;
 	}
