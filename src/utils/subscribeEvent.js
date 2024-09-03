@@ -68,7 +68,7 @@ export const subscribeEvent = async (
 		// Consume the messages
 		channel.consume(q.queue, async (msg) => {
 			logInfo(
-				`Event Received: ${eventName}. Exchange: ${exchangeName}, Routing Key: ${routingKey} \non queue: ${queueName}.`
+				`Event Received: ${eventName}. Exchange: ${exchangeName} \non queue: ${queueName}.`
 			);
 			if (msg !== null) {
 				let timeoutHandler;
