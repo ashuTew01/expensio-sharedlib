@@ -102,9 +102,7 @@ export const subscribeEvent = async (
 			}
 		});
 
-		logInfo(
-			`Subscribed to event '${eventName}' on queue '${queueName}' with routing key '${routingKey}'`
-		);
+		logInfo(`Subscribed to event '${eventName}' on queue '${queueName}'.`);
 	} catch (error) {
 		logError(
 			`Failed to subscribe to event '${eventName}' on queue '${queueName}': ${error.message}`

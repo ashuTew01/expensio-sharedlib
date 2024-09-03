@@ -40,9 +40,7 @@ export const publishEvent = async (eventName, data, channel) => {
 			Buffer.from(JSON.stringify(data))
 		);
 
-		logInfo(
-			`Event '${eventName}' published to exchange ${exchangeName} with routing key ${routingKey}`
-		);
+		logInfo(`Event '${eventName}' published to exchange ${exchangeName}.`);
 	} catch (error) {
 		logError(
 			`Failed to publish event '${eventName}' to exchange ${exchangeName}:`,
