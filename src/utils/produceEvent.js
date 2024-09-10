@@ -52,7 +52,7 @@ export const produceEvent = async (
 			messages: [{ key: eventName, value: JSON.stringify(message) }],
 		});
 
-		logInfo(`Event with ID ${message.eventId} produced to topic ${topicName}.`);
+		logInfo(`Event Produced: '${eventName}' to topic '${topicName}'.`);
 	} catch (error) {
 		logError(`Failed to produce event to Kafka: ${error.message}`);
 		throw error;

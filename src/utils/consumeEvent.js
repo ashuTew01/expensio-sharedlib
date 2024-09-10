@@ -51,22 +51,24 @@ export const consumeEvent = async (
 
 				// Only process messages that match the eventName (key)
 				if (key === eventName) {
-					logInfo(`Processing event: ${eventName} from topic: ${topic}`);
+					logInfo(`Event Processing: ${eventName} from topic: ${topic}`);
 
 					// Pass the message to the onMessage callback
 					await onMessage({
 						key: key,
 						message: JSON.parse(value), // Convert message value to an object
 					});
-				} else {
-					logInfo(
-						`Skipping message with key: ${key}. Expected key: ${eventName}`
-					);
+					logInfo(`Event Processed: ${eventName} from topic: ${topic}`);
 				}
+				//  else {
+				// 	logInfo(
+				// 		`Skipping message with key: ${key}. Expected key: ${eventName}`
+				// 	);
+				// }
 			},
 		});
 
-		logInfo(`Subscribed to topic '${topicName}' for event '${eventName}'.`);
+		logInfo(`Subscribed to '${eventName}' from topic '${topicName}'.`);
 	} catch (error) {
 		logError(`Failed to consume event from Kafka: ${error.message}`);
 		throw error;
