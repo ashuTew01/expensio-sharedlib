@@ -1,3 +1,4 @@
+//first word before_ should be same as the exchange.
 const eventNames = [
 	//user events...
 	"USER_DELETED",
@@ -35,3 +36,12 @@ export const ROUTING_KEYS = eventNames.reduce((keys, event) => {
 	keys[event] = routingKey;
 	return keys;
 }, {});
+
+// ******************* KAKFA ***************************
+export const TOPICS = {
+	USER: "user-events",
+	EXPENSE: "expense-events",
+	FINANCIALDATA: "financial-data-events",
+	INCOME: "income-events",
+	// Add new exchanges here
+};

@@ -17,6 +17,13 @@ export {
 	logWarning,
 	logInfo,
 } from "./config/logger.js";
-export { EVENTS, EXCHANGES, ROUTING_KEYS } from "./config/eventConfig.js";
+export {
+	EVENTS,
+	EXCHANGES,
+	ROUTING_KEYS,
+	TOPICS,
+} from "./config/eventConfig.js";
 export { publishEvent } from "./utils/publishEvent.js";
 export { subscribeEvent } from "./utils/subscribeEvent.js";
+export { consumeEvent } from "./utils/consumeEvent.js";
+export { produceEvent } from "./utils/produceEvent.js";

@@ -37,7 +37,8 @@ export const publishEvent = async (eventName, data, channel) => {
 		await channel.publish(
 			exchangeName,
 			routingKey,
-			Buffer.from(JSON.stringify(data))
+			Buffer.from(JSON.stringify(data)),
+			{ persistent: true }
 		);
 
 		logInfo(`Event '${eventName}' published to exchange ${exchangeName}.`);

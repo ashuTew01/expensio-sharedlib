@@ -48,6 +48,7 @@ declare module "@expensio/sharedlib" {
 
 	// Event Config
 	export const EVENTS: { [key: string]: string };
+	export const TOPICS: { [key: string]: string };
 	export const EXCHANGES: { [key: string]: string };
 	export const ROUTING_KEYS: { [key: string]: string };
 
@@ -62,5 +63,37 @@ declare module "@expensio/sharedlib" {
 		queueName: string,
 		onMessage: (data: any) => void,
 		channel: any
+	): Promise<void>;
+
+	/**
+	 * Produce an event to Kafka
+	 * @param {String} eventName - Name of the event. (Key for Kafka)
+	 * @param {Object} data - The event payload.
+	 * @param {String} eventId - Unique identifier for the event.
+	 * @param {String} topicName - Kafka topic to publish to.
+	 * @param {Object} producer - Kafka producer instance.
+	 * @returns {Promise<void>}
+	 */
+	export function produceEvent(
+		eventName: string,
+		data: object,
+		eventId: string,
+		topicName: string,
+		producer: object
+	): Promise<void>;
+
+	/**
+	 * Consumes an event from Kafka
+	 * @param {String} eventName - Name of the event (Kafka key).
+	 * @param {String} topicName - Kafka topic to consume from.
+	 * @param {Function} onMessage - Function to call when the message is received.
+	 * @param {Object} consumer - Kafka consumer instance.
+	 * @returns {Promise<void>}
+	 */
+	export function consumeEvent(
+		eventName: string,
+		topicName: string,
+		onMessage: (data: any) => void,
+		consumer: object
 	): Promise<void>;
 }
