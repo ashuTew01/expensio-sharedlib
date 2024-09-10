@@ -69,19 +69,18 @@ declare module "@expensio/sharedlib" {
 	 * Produce an event to Kafka
 	 * @param {String} eventName - Name of the event. (Key for Kafka)
 	 * @param {Object} data - The event payload.
-	 * @param {String} eventId - Unique identifier for the event.
 	 * @param {String} topicName - Kafka topic to publish to.
 	 * @param {Object} producer - Kafka producer instance.
+	 * @Optional {String} eventId - Unique identifier for the event.
 	 * @returns {Promise<void>}
 	 */
 	export function produceEvent(
 		eventName: string,
-		data: object,
-		eventId: string,
+		data: any,
 		topicName: string,
-		producer: object
+		producer: object,
+		eventId?: string
 	): Promise<void>;
-
 	/**
 	 * Consumes an event from Kafka
 	 * @param {String} eventName - Name of the event (Kafka key).
