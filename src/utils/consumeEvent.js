@@ -54,10 +54,10 @@ export const consumeEvent = async (
 					logInfo(`Processing event: ${eventName} from topic: ${topic}`);
 
 					// Pass the message to the onMessage callback
-					const data = JSON.parse(value).data;
-					await onMessage(
-						data // Convert message value to an object
-					);
+					await onMessage({
+						key: key,
+						message: JSON.parse(value), // Convert message value to an object
+					});
 				} else {
 					logInfo(
 						`Skipping message with key: ${key}. Expected key: ${eventName}`
