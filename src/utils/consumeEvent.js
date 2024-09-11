@@ -1,5 +1,6 @@
 import { logError, logInfo } from "../config/logger.js";
 import { EVENTS, TOPICS } from "../config/eventConfig.js";
+import { produceEvent } from "./produceEvent.js"; // Assuming the produceEvent function is defined to handle Kafka event production
 
 /**
  * Consumes an event from Kafka
@@ -7,19 +8,26 @@ import { EVENTS, TOPICS } from "../config/eventConfig.js";
  * @param {String} topicName - Kafka topic to consume from.
  * @param {Function} onMessage - Function to call when the message is received.
  * @param {Object} consumer - Kafka consumer instance.
+ * @param {Object} producer - Kafka producer instance for sending to DLQ.
+ * @requires {process.env.SERVICE_NAME}
  * @returns {Promise<void>}
  */
 export const consumeEvent = async (
 	eventName,
 	topicName,
 	onMessage,
-	consumer
+	consumer,
+	producer
 ) => {
 	try {
-		if (!eventName || !topicName || !onMessage || !consumer) {
+		if (!eventName || !topicName || !onMessage || !consumer || !producer) {
 			throw new Error(
-				"Invalid arguments: eventName, topicName, onMessage, or consumer not provided."
+				"Invalid arguments: eventName, topicName, onMessage, consumer, or producer not provided."
 			);
+		}
+
+		if (!process.env.SERVICE_NAME) {
+			throw new Error("SERVICE_NAME not provided in environment variables.");
 		}
 
 		// Check if the eventName is valid.
@@ -53,18 +61,49 @@ export const consumeEvent = async (
 				if (key === eventName) {
 					logInfo(`Event Processing: ${eventName} from topic: ${topic}`);
 
-					// Pass the message to the onMessage callback
-					await onMessage({
-						key: key,
-						message: JSON.parse(value), // Convert message value to an object
-					});
-					logInfo(`Event Processed: ${eventName} from topic: ${topic}`);
+					try {
+						// Process the message
+						await onMessage({
+							key: key,
+							message: JSON.parse(value), // Convert message value to an object
+						});
+
+						logInfo(`Event Processed: ${eventName} from topic: ${topic}`);
+
+						// Commit the offset after successful processing
+						await consumer.commitOffsets([
+							{
+								topic,
+								partition,
+								offset: (Number(message.offset) + 1).toString(),
+							},
+						]);
+						logInfo(`Offset committed for event: ${eventName}`);
+					} catch (err) {
+						logError(`Error processing event: ${eventName}. Sending to DLQ.`);
+
+						// Send the failed event to the dead-letter topic
+						const dlqTopic = `${process.env.SERVICE_NAME}-events-dlq`;
+						await produceEvent(
+							eventName,
+							JSON.parse(value),
+							dlqTopic,
+							producer
+						);
+
+						logInfo(`Event sent to DLQ: ${dlqTopic}`);
+
+						// Commit the offset even if the message failed
+						await consumer.commitOffsets([
+							{
+								topic,
+								partition,
+								offset: (Number(message.offset) + 1).toString(),
+							},
+						]);
+						logInfo(`Offset committed for event sent to DLQ: ${eventName}`);
+					}
 				}
-				//  else {
-				// 	logInfo(
-				// 		`Skipping message with key: ${key}. Expected key: ${eventName}`
-				// 	);
-				// }
 			},
 		});
 
