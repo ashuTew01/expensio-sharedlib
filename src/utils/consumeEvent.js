@@ -79,6 +79,7 @@ export const consumeEvent = async (
 						]);
 
 						logInfo(`Offset committed for event sent to DLQ: ${key}`);
+						throw err;
 					}
 				}
 			},
