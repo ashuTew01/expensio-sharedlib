@@ -81,19 +81,16 @@ declare module "@expensio/sharedlib" {
 	): Promise<void>;
 
 	/**
-	 * Consumes an event from Kafka. Commits offsets manually, synchronously.
-	 * @param {String} eventName - Name of the event (Kafka key).
-	 * @param {String} topicName - Kafka topic to consume from.
-	 * @param {Function} onMessage - Function to call when the message is received.
+	 * Consumes events from Kafka and dispatches them to the appropriate handlers.
+	 * @param {Object} eventHandlers - An object where keys are event names and values are functions to handle those events.
+	 * @param {Array<String>} topics - Array of Kafka topics to consume from.
 	 * @param {Object} consumer - Kafka consumer instance.
-	 * @param {Object} producer - Kafka producer instance for sending to DLQ.
-	 * @requires {process.env.SERVICE_NAME}
+	 * @param {Object} producer - Kafka producer instance (for DLQ).
 	 * @returns {Promise<void>}
 	 */
 	export function consumeEvent(
-		eventName: string,
-		topicName: string,
-		onMessage: (data: any) => void,
+		eventHandlers: object,
+		topics: string[],
 		consumer: object,
 		producer: object
 	): Promise<void>;
