@@ -87,9 +87,7 @@ export const consumeEvent = async (
 			},
 		});
 
-		logInfo(
-			`Subscribed to Events: ${Object.keys(eventHandlers).join(", ")} on topics: ${topics.join(", ")}`
-		);
+		logInfo(`Subscribed to Events on topics: ${topics.join(", ")}`);
 	} catch (error) {
 		logError(`Failed to consume event from Kafka: ${error.message}`);
 		throw error;
