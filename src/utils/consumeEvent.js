@@ -1,3 +1,5 @@
+import { logError, logInfo } from "../config/logger.js";
+
 /**
  * Consumes events from Kafka and dispatches them to the appropriate handlers.
  * @param {Object} eventHandlers - An object where keys are event names and values are functions to handle those events.
