@@ -1,22 +1,21 @@
 import { EVENTS } from "@expensio/sharedlib";
 import { logError, logInfo } from "../config/logger.js";
 import { TOPICS } from "../config/eventConfig.js";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 /**
  * Produce an event to Kafka
  * @param {String} eventName - Name of the event. (Key for Kafka)
  * @param {Object} data - The event payload.
  * @param {String} topicName - Kafka topic to publish to.
  * @param {Object} producer - Kafka producer instance.
- * @Optional {String} eventId - Unique identifier for the event.
  * @returns {Promise<void>}
  */
 export const produceEvent = async (
 	eventName,
 	data,
 	topicName,
-	producer,
-	eventId = uuidv4()
+	producer
+	// eventId = uuidv4()
 ) => {
 	try {
 		if (!eventName || !data || !eventId || !topicName || !producer) {
@@ -41,15 +40,16 @@ export const produceEvent = async (
 			);
 		}
 
-		//Prepare message with eventID.
-		const message = {
-			eventId,
-			data,
-		};
+		// //Prepare message with eventID.
+		// const message = {
+		// 	eventId,
+		// 	data,
+		// };
+
 		// Send message to Kafka topic
 		await producer.send({
 			topic: topicName,
-			messages: [{ key: eventName, value: JSON.stringify(message) }],
+			messages: [{ key: eventName, value: JSON.stringify(data) }],
 		});
 
 		logInfo(`Event Produced: '${eventName}' to topic '${topicName}'.`);

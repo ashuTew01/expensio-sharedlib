@@ -1,28 +1,21 @@
-import { logError, logInfo } from "../config/logger.js";
-import { EVENTS, TOPICS } from "../config/eventConfig.js";
-import { produceEvent } from "./produceEvent.js"; // Assuming the produceEvent function is defined to handle Kafka event production
-
 /**
- * Consumes an event from Kafka
- * @param {String} eventName - Name of the event (Kafka key).
- * @param {String} topicName - Kafka topic to consume from.
- * @param {Function} onMessage - Function to call when the message is received.
+ * Consumes events from Kafka and dispatches them to the appropriate handlers.
+ * @param {Object} eventHandlers - An object where keys are event names and values are functions to handle those events.
+ * @param {Array<String>} topics - Array of Kafka topics to consume from.
  * @param {Object} consumer - Kafka consumer instance.
- * @param {Object} producer - Kafka producer instance for sending to DLQ.
- * @requires {process.env.SERVICE_NAME}
+ * @param {Object} producer - Kafka producer instance (for DLQ).
  * @returns {Promise<void>}
  */
 export const consumeEvent = async (
-	eventName,
-	topicName,
-	onMessage,
+	eventHandlers,
+	topics,
 	consumer,
 	producer
 ) => {
 	try {
-		if (!eventName || !topicName || !onMessage || !consumer || !producer) {
+		if (!eventHandlers || !topics || !consumer || !producer) {
 			throw new Error(
-				"Invalid arguments: eventName, topicName, onMessage, consumer, or producer not provided."
+				"Invalid arguments: eventHandlers, topics, consumer, or producer not provided."
 			);
 		}
 
@@ -30,45 +23,24 @@ export const consumeEvent = async (
 			throw new Error("SERVICE_NAME not provided in environment variables.");
 		}
 
-		// Check if the eventName is valid.
-		const validEvents = Object.values(EVENTS);
-		if (!validEvents.includes(eventName)) {
-			const availableEvents = validEvents.join(", ");
-			throw new Error(
-				`Invalid event name '${eventName}'. Available events are: ${availableEvents}`
-			);
-		}
-
-		// Check if the topicName is valid.
-		const validTopics = Object.values(TOPICS);
-		if (!validTopics.includes(topicName)) {
-			const availableTopics = validTopics.join(", ");
-			throw new Error(
-				`Invalid topic name '${topicName}'. Available topics are: ${availableTopics}`
-			);
-		}
-
-		// Subscribe to the topic
-		await consumer.subscribe({ topic: topicName, fromBeginning: false });
+		// Subscribe to all topics at once
+		await consumer.subscribe({ topics, fromBeginning: false });
 
 		// Run the consumer to listen for messages
 		await consumer.run({
 			eachMessage: async ({ topic, partition, message }) => {
 				const key = message.key ? message.key.toString() : null;
-				const value = message.value.toString();
+				const value = JSON.parse(message.value.toString());
 
-				// Only process messages that match the eventName (key)
-				if (key === eventName) {
-					logInfo(`Event Processing: ${eventName} from topic: ${topic}`);
+				// Only process if there's a matching event handler for the key (eventName)
+				if (key && eventHandlers[key]) {
+					logInfo(`Event Processing: ${key} from topic: ${topic}`);
 
 					try {
-						// Process the message
-						await onMessage({
-							key: key,
-							message: JSON.parse(value), // Convert message value to an object
-						});
+						// Call the event handler with the entire message (parsed as JSON)
+						await eventHandlers[key](value);
 
-						logInfo(`Event Processed: ${eventName} from topic: ${topic}`);
+						logInfo(`Event Processed: ${key} from topic: ${topic}`);
 
 						// Commit the offset after successful processing
 						await consumer.commitOffsets([
@@ -78,18 +50,22 @@ export const consumeEvent = async (
 								offset: (Number(message.offset) + 1).toString(),
 							},
 						]);
-						logInfo(`Offset committed for event: ${eventName}`);
+
+						logInfo(`Offset committed for event: ${key}`);
 					} catch (err) {
-						logError(`Error processing event: ${eventName}. Sending to DLQ.`);
+						logError(`Error processing event: ${key}. Sending to DLQ.`);
 
 						// Send the failed event to the dead-letter topic
-						const dlqTopic = `${process.env.SERVICE_NAME}-events-dlq`;
-						await produceEvent(
-							eventName,
-							JSON.parse(value),
-							dlqTopic,
-							producer
-						);
+						const dlqTopic = `${topic}-dlq`;
+						const dlqValue = {
+							serviceName: process.env.SERVICE_NAME,
+							error: err.message,
+							value: value,
+						};
+						await producer.send({
+							topic: dlqTopic,
+							messages: [{ key, value: JSON.stringify(dlqValue) }],
+						});
 
 						logInfo(`Event sent to DLQ: ${dlqTopic}`);
 
@@ -101,13 +77,14 @@ export const consumeEvent = async (
 								offset: (Number(message.offset) + 1).toString(),
 							},
 						]);
-						logInfo(`Offset committed for event sent to DLQ: ${eventName}`);
+
+						logInfo(`Offset committed for event sent to DLQ: ${key}`);
 					}
 				}
 			},
 		});
 
-		logInfo(`Subscribed to '${eventName}' from topic '${topicName}'.`);
+		logInfo(`Subscribed to topics: ${topics.join(", ")}`);
 	} catch (error) {
 		logError(`Failed to consume event from Kafka: ${error.message}`);
 		throw error;

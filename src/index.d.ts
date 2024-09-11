@@ -71,15 +71,13 @@ declare module "@expensio/sharedlib" {
 	 * @param {Object} data - The event payload.
 	 * @param {String} topicName - Kafka topic to publish to.
 	 * @param {Object} producer - Kafka producer instance.
-	 * @Optional {String} eventId - Unique identifier for the event.
 	 * @returns {Promise<void>}
 	 */
 	export function produceEvent(
 		eventName: string,
 		data: any,
 		topicName: string,
-		producer: object,
-		eventId?: string
+		producer: object
 	): Promise<void>;
 
 	/**
