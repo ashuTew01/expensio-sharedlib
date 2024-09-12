@@ -18,7 +18,7 @@ export const produceEvent = async (
 	// eventId = uuidv4()
 ) => {
 	try {
-		if (!eventName || !data || !eventId || !topicName || !producer) {
+		if (!eventName || !data || !topicName || !producer) {
 			throw new Error("Some parameters missing...");
 		}
 
