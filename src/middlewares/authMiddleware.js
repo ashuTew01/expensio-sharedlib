@@ -7,6 +7,7 @@ const authMiddleware = (req, res, next) => {
 	try {
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
 		req.user = decoded;
+		req.userToken = token;
 		next();
 	} catch (error) {
 		logError(`User Authentication Failed. \n ${error}`);
