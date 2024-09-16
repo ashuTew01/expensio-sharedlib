@@ -1,5 +1,6 @@
 // logger.js
 import { createLogger, format, transports } from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
 import path from "path";
 import fs from "fs";
 
@@ -9,10 +10,6 @@ const initLogger = (logDirectory) => {
 	if (!fs.existsSync(logDirectory)) {
 		fs.mkdirSync(logDirectory, { recursive: true });
 	}
-
-	const errorLogPath = path.join(logDirectory, "error.log");
-	const warnLogPath = path.join(logDirectory, "warn.log");
-	const infoLogPath = path.join(logDirectory, "info.log");
 
 	// Define custom formats for console and file transports
 	const consoleFormat = format.combine(
@@ -36,20 +33,35 @@ const initLogger = (logDirectory) => {
 				level: "debug",
 				format: consoleFormat, // Use custom console format
 			}),
-			new transports.File({
-				filename: errorLogPath,
+			// Configure daily rotate file transport for error logs
+			new DailyRotateFile({
+				filename: path.join(logDirectory, "error-%DATE%.log"),
+				datePattern: "YYYY-MM-DD", // Rotate daily
 				level: "error",
-				format: fileFormat, // Use JSON format for files
+				format: fileFormat,
+				maxSize: "20m", // Maximum size of the file before it's rotated
+				maxFiles: "14d", // Keep logs for the last 14 days
+				zippedArchive: true, // Compress rotated files
 			}),
-			new transports.File({
-				filename: warnLogPath,
+			// Configure daily rotate file transport for warn logs
+			new DailyRotateFile({
+				filename: path.join(logDirectory, "warn-%DATE%.log"),
+				datePattern: "YYYY-MM-DD",
 				level: "warn",
 				format: fileFormat,
+				maxSize: "20m",
+				maxFiles: "14d",
+				zippedArchive: true,
 			}),
-			new transports.File({
-				filename: infoLogPath,
+			// Configure daily rotate file transport for info logs
+			new DailyRotateFile({
+				filename: path.join(logDirectory, "info-%DATE%.log"),
+				datePattern: "YYYY-MM-DD",
 				level: "info",
 				format: fileFormat,
+				maxSize: "20m",
+				maxFiles: "14d",
+				zippedArchive: true,
 			}),
 		],
 	});
