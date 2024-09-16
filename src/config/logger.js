@@ -1,11 +1,7 @@
+// logger.js
 import { createLogger, format, transports } from "winston";
 import path from "path";
 import fs from "fs";
-
-const logFormat = format.combine(
-	format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-	format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
-);
 
 let logger;
 
@@ -18,40 +14,50 @@ const initLogger = (logDirectory) => {
 	const warnLogPath = path.join(logDirectory, "warn.log");
 	const infoLogPath = path.join(logDirectory, "info.log");
 
+	// Define custom formats for console and file transports
+	const consoleFormat = format.combine(
+		format.colorize(),
+		format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+		format.printf((info) => {
+			const { timestamp, level } = info;
+			let message = info.message;
+
+			// Handle cases where message is an object (due to options being passed)
+			if (typeof message === "object") {
+				message = message.message || JSON.stringify(message);
+			}
+
+			return `${timestamp} ${level}: ${message}`;
+		})
+	);
+
+	const fileFormat = format.combine(
+		format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+		format.uncolorize(),
+		format.json()
+	);
+
 	logger = createLogger({
-		level: "debug", // set to 'debug' to capture (almost) all levels of logs
-		format: logFormat,
+		level: "debug", // Capture all levels of logs
 		transports: [
 			new transports.Console({
 				level: "debug",
-				format: format.combine(format.colorize(), logFormat),
+				format: consoleFormat, // Use custom console format
 			}),
 			new transports.File({
 				filename: errorLogPath,
 				level: "error",
-				format: format.combine(
-					format.uncolorize(),
-					format.timestamp(),
-					format.json()
-				),
+				format: fileFormat, // Use JSON format for files
 			}),
 			new transports.File({
 				filename: warnLogPath,
 				level: "warn",
-				format: format.combine(
-					format.uncolorize(),
-					format.timestamp(),
-					format.json()
-				),
+				format: fileFormat,
 			}),
 			new transports.File({
 				filename: infoLogPath,
 				level: "info",
-				format: format.combine(
-					format.uncolorize(),
-					format.timestamp(),
-					format.json()
-				),
+				format: fileFormat,
 			}),
 		],
 	});
@@ -75,7 +81,7 @@ const logInfo = (message, options = {}) => {
 	if (Object.keys(options).length === 0) {
 		loggerInstance.info(message);
 	} else {
-		loggerInstance.info(message, options);
+		loggerInstance.info({ message, ...options });
 	}
 };
 
@@ -90,7 +96,7 @@ const logWarning = (message, options = {}) => {
 	if (Object.keys(options).length === 0) {
 		loggerInstance.warn(message);
 	} else {
-		loggerInstance.warn(message, options);
+		loggerInstance.warn({ message, ...options });
 	}
 };
 
@@ -105,7 +111,7 @@ const logError = (message, options = {}) => {
 	if (Object.keys(options).length === 0) {
 		loggerInstance.error(message);
 	} else {
-		loggerInstance.error(message, options);
+		loggerInstance.error({ message, ...options });
 	}
 };
 
