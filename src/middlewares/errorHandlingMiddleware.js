@@ -4,6 +4,10 @@ const errorHandlingMiddleware = (err, req, res, next) => {
 	const statusCode = err.statusCode || 500;
 	const publicMessage =
 		err.publicMessage || err.message || "An internal server error occurred";
+	logInfo(`1:  ${req.ip}`, {
+		ip: req.ip,
+	});
+	logInfo(`2:  ${req.ip}`);
 
 	if (statusCode >= 500) {
 		logError(`${statusCode} - ${err.name}: ${err.message}`, {
