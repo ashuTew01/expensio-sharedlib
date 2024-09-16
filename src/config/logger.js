@@ -64,20 +64,49 @@ const getLogger = () => {
 	return logger;
 };
 
-// Wrapper methods for different log levels
-const logInfo = (message) => {
+/**
+ * Logs a message with info level.
+ *
+ * @param {string} message The message to log.
+ * @param {Object} [options] Additional options for the log message.
+ */
+const logInfo = (message, options = {}) => {
 	const loggerInstance = getLogger();
-	loggerInstance.info(message);
+	if (Object.keys(options).length === 0) {
+		loggerInstance.info(message);
+	} else {
+		loggerInstance.info(message, options);
+	}
 };
 
-const logWarning = (message) => {
+/**
+ * Logs a message with warn level.
+ *
+ * @param {string} message The message to log.
+ * @param {Object} [options] Additional options for the log message.
+ */
+const logWarning = (message, options = {}) => {
 	const loggerInstance = getLogger();
-	loggerInstance.warn(message);
+	if (Object.keys(options).length === 0) {
+		loggerInstance.warn(message);
+	} else {
+		loggerInstance.warn(message, options);
+	}
 };
 
-const logError = (message) => {
+/**
+ * Logs a message with error level.
+ *
+ * @param {string} message The message to log.
+ * @param {Object} [options] Additional options for the log message.
+ */
+const logError = (message, options = {}) => {
 	const loggerInstance = getLogger();
-	loggerInstance.error(message);
+	if (Object.keys(options).length === 0) {
+		loggerInstance.error(message);
+	} else {
+		loggerInstance.error(message, options);
+	}
 };
 
 export { initLogger, getLogger, logInfo, logWarning, logError };

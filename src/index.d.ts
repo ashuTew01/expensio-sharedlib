@@ -42,9 +42,63 @@ declare module "@expensio/sharedlib" {
 	// Logger
 	export function initLogger(logDirectory: string): void;
 	export function getLogger(): any;
-	export function logError(message: string): void;
-	export function logWarning(message: string): void;
-	export function logInfo(message: string): void;
+
+	/**
+	 * Logs a message with error level.
+	 *
+	 * @param {string} message The message to log.
+	 * @param {Object} [options] Additional options for the log message.
+	 *      - transport: The transport to use for logging.
+	 *      - level: The level of the log message.
+	 *      - label: The label of the log message.
+	 *      - timestamp: The timestamp of the log message.
+	 *      - json: The JSON payload of the log message.
+	 *      - metadata: Additional metadata for the log message.
+	 *      - depth: The depth of the log message.
+	 *      - formatter: The formatter to use for the log message.
+	 *      - raw: The raw log message.
+	 *      - stack: The stack trace of the log message.
+	 *      - error: The error object that triggered the log message.
+	 */
+	export function logError(message: string, options?: object): void;
+
+	/**
+	 * Logs a message with warning level.
+	 *
+	 * @param {string} message The message to log.
+	 * @param {Object} [options] Additional options for the log message.
+	 *      - transport: The transport to use for logging.
+	 *      - level: The level of the log message.
+	 *      - label: The label of the log message.
+	 *      - timestamp: The timestamp of the log message.
+	 *      - json: The JSON payload of the log message.
+	 *      - metadata: Additional metadata for the log message.
+	 *      - depth: The depth of the log message.
+	 *      - formatter: The formatter to use for the log message.
+	 *      - raw: The raw log message.
+	 *      - stack: The stack trace of the log message.
+	 *      - error: The error object that triggered the log message.
+	 */
+	export function logWarning(message: string, options?: object): void;
+
+	/**
+	 * Logs a message with info level.
+	 *
+	 * @param {string} message The message to log.
+	 * @param {Object} [options] Additional options for the log message.
+	 *      - transport: The transport to use for logging.
+	 *      - level: The level of the log message.
+	 *      - label: The label of the log message.
+	 *      - timestamp: The timestamp of the log message.
+	 *      - json: The JSON payload of the log message.
+	 *      - metadata: Additional metadata for the log message.
+	 *      - depth: The depth of the log message.
+	 *      - formatter: The formatter to use for the log message.
+	 *      - raw: The raw log message.
+	 *      - stack: The stack trace of the log message.
+	 *      - error: The error object that triggered the log message.
+	 */
+	export function logInfo(message: string, options?: object): void;
 
 	// Event Config
 	export const EVENTS: { [key: string]: string };
