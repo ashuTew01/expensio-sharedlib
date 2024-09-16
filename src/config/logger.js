@@ -18,15 +18,7 @@ const initLogger = (logDirectory) => {
 	const consoleFormat = format.combine(
 		format.colorize(),
 		format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-		format.printf((info) => {
-			const { timestamp, level } = info;
-			let message = info.message;
-
-			// Handle cases where message is an object (due to options being passed)
-			if (typeof message === "object") {
-				message = message.message || JSON.stringify(message);
-			}
-
+		format.printf(({ timestamp, level, message }) => {
 			return `${timestamp} ${level}: ${message}`;
 		})
 	);
@@ -78,11 +70,7 @@ const getLogger = () => {
  */
 const logInfo = (message, options = {}) => {
 	const loggerInstance = getLogger();
-	if (Object.keys(options).length === 0) {
-		loggerInstance.info(message);
-	} else {
-		loggerInstance.info({ message, ...options });
-	}
+	loggerInstance.info(message, options);
 };
 
 /**
@@ -93,11 +81,7 @@ const logInfo = (message, options = {}) => {
  */
 const logWarning = (message, options = {}) => {
 	const loggerInstance = getLogger();
-	if (Object.keys(options).length === 0) {
-		loggerInstance.warn(message);
-	} else {
-		loggerInstance.warn({ message, ...options });
-	}
+	loggerInstance.warn(message, options);
 };
 
 /**
@@ -108,11 +92,7 @@ const logWarning = (message, options = {}) => {
  */
 const logError = (message, options = {}) => {
 	const loggerInstance = getLogger();
-	if (Object.keys(options).length === 0) {
-		loggerInstance.error(message);
-	} else {
-		loggerInstance.error({ message, ...options });
-	}
+	loggerInstance.error(message, options);
 };
 
 export { initLogger, getLogger, logInfo, logWarning, logError };
