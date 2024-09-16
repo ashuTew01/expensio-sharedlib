@@ -6,29 +6,38 @@ const errorHandlingMiddleware = (err, req, res, next) => {
 		err.publicMessage || err.message || "An internal server error occurred";
 
 	if (statusCode >= 500) {
-		logError(`${statusCode} - ${err.name}: ${err.message}`, {
-			url: req.originalUrl,
-			body: req.body,
-			method: req.method,
-			ip: req.ip,
-			errorStack: err.stack,
-		});
+		logError(
+			`${statusCode} - ${err.name}: ${err.message}`
+			// 	{
+			// 	url: req.originalUrl,
+			// 	body: req.body,
+			// 	method: req.method,
+			// 	ip: req.ip,
+			// 	errorStack: err.stack,
+			// }
+		);
 	} else if (statusCode >= 400) {
-		logWarning(`${statusCode} - ${err.name}: ${err.message}`, {
-			url: req.originalUrl,
-			body: req.body,
-			method: req.method,
-			ip: req.ip,
-			errorStack: err.stack,
-		});
+		logWarning(
+			`${statusCode} - ${err.name}: ${err.message}`
+			// 	{
+			// 	url: req.originalUrl,
+			// 	body: req.body,
+			// 	method: req.method,
+			// 	ip: req.ip,
+			// 	errorStack: err.stack,
+			// }
+		);
 	} else {
-		logInfo(`${statusCode} - ${err.name}: ${err.message}`, {
-			url: req.originalUrl,
-			body: req.body,
-			method: req.method,
-			ip: req.ip,
-			errorStack: err.stack,
-		});
+		logInfo(
+			`${statusCode} - ${err.name}: ${err.message}`
+			// 	{
+			// 	url: req.originalUrl,
+			// 	body: req.body,
+			// 	method: req.method,
+			// 	ip: req.ip,
+			// 	errorStack: err.stack,
+			// }
+		);
 	}
 
 	res.status(statusCode).json({ error: publicMessage });
