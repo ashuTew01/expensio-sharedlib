@@ -148,4 +148,10 @@ declare module "@expensio/sharedlib" {
 		consumer: object,
 		producer: object
 	): Promise<void>;
+
+	/**
+	 * Prints the Expensio logo to the console.
+	 * @returns {void}
+	 */
+	export function showLogo(): void;
 }
