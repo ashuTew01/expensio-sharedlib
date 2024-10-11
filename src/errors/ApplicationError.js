@@ -11,7 +11,7 @@ export default class ApplicationError extends Error {
 		}
 
 		// Call the parent Error constructor with the error's message
-		super(error.message);
+		super(error.message || "Internal server error");
 
 		// Set the class name, status code, and public message
 		this.name = this.constructor.name; // e.g., ApplicationError, AuthenticationError
@@ -20,9 +20,6 @@ export default class ApplicationError extends Error {
 		if (customErrorMessage) {
 			this.customErrorMessage = customErrorMessage;
 		}
-
-		// Copy over all properties from the original error to the new one
-		Object.assign(this, error);
 
 		// If necessary, you can set a reference to the original error as well
 		this.originalError = error;

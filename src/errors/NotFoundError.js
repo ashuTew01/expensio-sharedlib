@@ -7,7 +7,7 @@ export default class NotFoundError extends ApplicationError {
 		customErrorMessage = ""
 	) {
 		if (!error || !(error instanceof Error)) {
-			error = new Error(publicMessage);
+			error = new Error(customErrorMessage || publicMessage);
 		}
 
 		super(error, 404, publicMessage, customErrorMessage);

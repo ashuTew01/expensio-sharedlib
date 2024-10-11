@@ -7,7 +7,7 @@ export default class DatabaseError extends ApplicationError {
 		customErrorMessage = ""
 	) {
 		if (!error || !(error instanceof Error)) {
-			error = new Error(publicMessage);
+			error = new Error(customErrorMessage || publicMessage);
 		}
 
 		super(error, 500, publicMessage, customErrorMessage);

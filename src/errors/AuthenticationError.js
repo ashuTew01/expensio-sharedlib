@@ -7,7 +7,7 @@ export default class AuthenticationError extends ApplicationError {
 		customErrorMessage = ""
 	) {
 		if (!error || !(error instanceof Error)) {
-			error = new Error(publicMessage);
+			error = new Error(customErrorMessage || publicMessage);
 		}
 
 		super(error, 401, publicMessage, customErrorMessage);
