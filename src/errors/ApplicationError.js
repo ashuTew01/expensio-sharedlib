@@ -21,6 +21,9 @@ export default class ApplicationError extends Error {
 			this.customErrorMessage = customErrorMessage;
 		}
 
+		// Copy over all properties from the original error to the new one
+		Object.assign(this, error);
+
 		// If necessary, you can set a reference to the original error as well
 		this.originalError = error;
 	}
