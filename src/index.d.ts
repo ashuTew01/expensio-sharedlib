@@ -9,6 +9,7 @@ declare module "@expensio/sharedlib" {
 		constructor(
 			publicMessage?: string,
 			error?: Error,
+			isSentErrorPublic?: boolean,
 			customErrorMessage?: string
 		);
 	}
@@ -16,6 +17,7 @@ declare module "@expensio/sharedlib" {
 		constructor(
 			publicMessage?: string,
 			error?: Error,
+			isSentErrorPublic?: boolean,
 			customErrorMessage?: string
 		);
 	}
@@ -23,6 +25,7 @@ declare module "@expensio/sharedlib" {
 		constructor(
 			publicMessage?: string,
 			error?: Error,
+			isSentErrorPublic?: boolean,
 			customErrorMessage?: string
 		);
 	}
@@ -30,6 +33,7 @@ declare module "@expensio/sharedlib" {
 		constructor(
 			publicMessage?: string,
 			error?: Error,
+			isSentErrorPublic?: boolean,
 			customErrorMessage?: string
 		);
 	}
@@ -37,6 +41,7 @@ declare module "@expensio/sharedlib" {
 		constructor(
 			publicMessage?: string,
 			error?: Error,
+			isSentErrorPublic?: boolean,
 			customErrorMessage?: string
 		);
 	}
@@ -44,6 +49,7 @@ declare module "@expensio/sharedlib" {
 		constructor(
 			publicMessage?: string,
 			error?: Error,
+			isSentErrorPublic?: boolean,
 			customErrorMessage?: string
 		);
 	}
@@ -51,6 +57,7 @@ declare module "@expensio/sharedlib" {
 		constructor(
 			publicMessage?: string,
 			error?: Error,
+			isSentErrorPublic?: boolean,
 			customErrorMessage?: string
 		);
 	}
@@ -58,6 +65,7 @@ declare module "@expensio/sharedlib" {
 		constructor(
 			publicMessage?: string,
 			error?: Error,
+			isSentErrorPublic?: boolean,
 			customErrorMessage?: string
 		);
 	}

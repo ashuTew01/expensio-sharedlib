@@ -1,4 +1,4 @@
-export { default as ApplicationError } from "./errors/ApplicationError.js";
+// export { default as ApplicationError } from "./errors/ApplicationError.js";
 export { default as AuthorizationError } from "./errors/AuthorizationError.js";
 export { default as DatabaseError } from "./errors/DatabaseError.js";
 export { default as NotFoundError } from "./errors/NotFoundError.js";

@@ -19,6 +19,8 @@ const errorHandlingMiddleware = (err, req, res, next) => {
 				method: req.method,
 				ip: req.ip,
 				errorStack: err.stack || "No stack available",
+				originalError:
+					isCustomError && !err.isSentErrorPublic ? err.originalError : null,
 			});
 		} else if (statusCode >= 400) {
 			logWarning(`${statusCode} - ${err.name || "Error"}: ${err.message}`, {
@@ -44,7 +46,9 @@ const errorHandlingMiddleware = (err, req, res, next) => {
 			error: {
 				type: err.name || "Error", // Use the error name or fallback to "Error"
 				message: publicMessage, // The public message for the user
-				...(err.details && { details: err.details }), // Optionally include details if present
+				...(isCustomError &&
+					err.isSentErrorPublic &&
+					err.details && { details: err.details }), // Optionally include details if present
 			},
 		};
 
