@@ -1,12 +1,15 @@
 import ApplicationError from "./ApplicationError.js";
 
 export default class AuthorizationError extends ApplicationError {
-	constructor(message = "Authorization failed", error, publicMessage = "") {
+	constructor(
+		publicMessage = "Authorization failed",
+		error,
+		customErrorMessage = ""
+	) {
 		if (!error || !(error instanceof Error)) {
-			error = new Error(message);
+			error = new Error(publicMessage);
 		}
-		publicMessage = publicMessage || message;
 
-		super(error, 403, publicMessage);
+		super(error, 403, publicMessage, customErrorMessage);
 	}
 }

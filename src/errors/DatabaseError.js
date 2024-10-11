@@ -2,15 +2,14 @@ import ApplicationError from "./ApplicationError.js";
 
 export default class DatabaseError extends ApplicationError {
 	constructor(
-		message = "An error occurred with the database operation",
+		publicMessage = "An error occurred with the database operation",
 		error,
-		publicMessage = ""
+		customErrorMessage = ""
 	) {
 		if (!error || !(error instanceof Error)) {
-			error = new Error(message);
+			error = new Error(publicMessage);
 		}
-		publicMessage = publicMessage || message;
 
-		super(error, 500, publicMessage);
+		super(error, 500, publicMessage, customErrorMessage);
 	}
 }

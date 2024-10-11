@@ -1,12 +1,15 @@
 import ApplicationError from "./ApplicationError.js";
 
 export default class ValidationError extends ApplicationError {
-	constructor(message = "Validation failed", error, publicMessage = "") {
+	constructor(
+		publicMessage = "Validation failed",
+		error,
+		customErrorMessage = ""
+	) {
 		if (!error || !(error instanceof Error)) {
-			error = new Error(message);
+			error = new Error(publicMessage);
 		}
-		publicMessage = publicMessage || message;
 
-		super(error, 400, publicMessage);
+		super(error, 400, publicMessage, customErrorMessage);
 	}
 }

@@ -2,7 +2,8 @@ export default class ApplicationError extends Error {
 	constructor(
 		error = new Error("Internal server error"), // Default to a generic error
 		statusCode = 500, // Default HTTP status code
-		publicMessage = "" // Public facing message
+		publicMessage = "", // Public facing message
+		customErrorMessage = ""
 	) {
 		// Ensure the passed error is an instance of Error, else create a default one
 		if (!(error instanceof Error)) {
@@ -16,6 +17,9 @@ export default class ApplicationError extends Error {
 		this.name = this.constructor.name; // e.g., ApplicationError, AuthenticationError
 		this.statusCode = statusCode;
 		this.publicMessage = publicMessage || error.message;
+		if (customErrorMessage) {
+			this.customErrorMessage = customErrorMessage;
+		}
 
 		// Copy over all properties from the original error to the new one
 		Object.assign(this, error);

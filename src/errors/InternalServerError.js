@@ -1,12 +1,15 @@
 import ApplicationError from "./ApplicationError.js";
 
 export default class InternalServerError extends ApplicationError {
-	constructor(message = "Internal server error", error, publicMessage = "") {
+	constructor(
+		publicMessage = "Internal server error",
+		error,
+		customErrorMessage = ""
+	) {
 		if (!error || !(error instanceof Error)) {
-			error = new Error(message);
+			error = new Error(publicMessage);
 		}
-		publicMessage = publicMessage || message;
 
-		super(error, 500, publicMessage);
+		super(error, 500, publicMessage, customErrorMessage);
 	}
 }

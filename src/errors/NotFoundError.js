@@ -2,15 +2,14 @@ import ApplicationError from "./ApplicationError.js";
 
 export default class NotFoundError extends ApplicationError {
 	constructor(
-		message = "The requested resource was not found",
+		publicMessage = "The requested resource was not found",
 		error,
-		publicMessage = ""
+		customErrorMessage = ""
 	) {
 		if (!error || !(error instanceof Error)) {
-			error = new Error(message);
+			error = new Error(publicMessage);
 		}
-		publicMessage = publicMessage || message;
 
-		super(error, 404, publicMessage);
+		super(error, 404, publicMessage, customErrorMessage);
 	}
 }
