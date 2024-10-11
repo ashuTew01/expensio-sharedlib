@@ -1,37 +1,54 @@
 import { logError, logWarning, logInfo } from "../config/logger.js";
+import ApplicationError from "../errors/ApplicationError.js"; // Assuming ApplicationError is the base class
 
 const errorHandlingMiddleware = (err, req, res, next) => {
-	const statusCode = err.statusCode || 500;
-	const publicMessage =
-		err.publicMessage || err.message || "An internal server error occurred";
+	const isCustomError = err instanceof ApplicationError;
 
+	// Extracting statusCode and publicMessage
+	const statusCode = isCustomError ? err.statusCode : 500;
+	const publicMessage = isCustomError
+		? err.publicMessage
+		: "An unexpected error occurred. Please try again later.";
+
+	// Log error details based on severity (statusCode)
 	if (statusCode >= 500) {
-		logError(`${statusCode} - ${err.name}: ${err.message}`, {
+		logError(`${statusCode} - ${err.name || "Error"}: ${err.message}`, {
 			url: req.originalUrl,
 			body: req.body,
 			method: req.method,
 			ip: req.ip,
-			errorStack: err.stack,
+			errorStack: err.stack || "No stack available",
 		});
 	} else if (statusCode >= 400) {
-		logWarning(`${statusCode} - ${err.name}: ${err.message}`, {
+		logWarning(`${statusCode} - ${err.name || "Error"}: ${err.message}`, {
 			url: req.originalUrl,
 			body: req.body,
 			method: req.method,
 			ip: req.ip,
-			errorStack: err.stack,
+			errorStack: err.stack || "No stack available",
 		});
 	} else {
-		logInfo(`${statusCode} - ${err.name}: ${err.message}`, {
+		logInfo(`${statusCode} - ${err.name || "Info"}: ${err.message}`, {
 			url: req.originalUrl,
 			body: req.body,
 			method: req.method,
 			ip: req.ip,
-			errorStack: err.stack,
+			errorStack: err.stack || "No stack available",
 		});
 	}
 
-	res.status(statusCode).json({ error: publicMessage });
+	// Build a professional error response
+	const errorResponse = {
+		status: statusCode,
+		error: {
+			type: err.name || "Error", // Use the error name or fallback to "Error"
+			message: publicMessage, // The public message for the user
+			...(err.details && { details: err.details }), // Optionally include details if present
+		},
+	};
+
+	// Send a structured, professional error response to the client
+	res.status(statusCode).json(errorResponse);
 };
 
 export default errorHandlingMiddleware;
