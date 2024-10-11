@@ -6,6 +6,12 @@ declare module "@expensio/sharedlib" {
 	// 	constructor(message: string);
 	// }
 	export class AuthorizationError extends Error {
+		/**
+		 * @param publicMessage - Public message to display to the user. Defaults to "Authorization failed."
+		 * @param error - The original error that caused this error to be thrown. Defaults to a generic Error with the publicMessage.
+		 * @param isSentErrorPublic - Whether to send the specified error to the client. Defaults to true.
+		 * @param customErrorMessage - The custom error message to display to the user. Defaults to the publicMessage.
+		 */
 		constructor(
 			publicMessage?: string,
 			error?: Error,
@@ -14,6 +20,12 @@ declare module "@expensio/sharedlib" {
 		);
 	}
 	export class DatabaseError extends Error {
+		/**
+		 * @param publicMessage - Public message to display to the user. Defaults to "An error occurred with the database operation."
+		 * @param error - The original error that caused this error to be thrown. Defaults to a generic Error with the publicMessage.
+		 * @param isSentErrorPublic - Whether to send the specified error to the client. Defaults to true.
+		 * @param customErrorMessage - The custom error message to display to the user. Defaults to the publicMessage.
+		 */
 		constructor(
 			publicMessage?: string,
 			error?: Error,
@@ -22,6 +34,12 @@ declare module "@expensio/sharedlib" {
 		);
 	}
 	export class NotFoundError extends Error {
+		/**
+		 * @param publicMessage - Public message to display to the user. Defaults to "The requested resource was not found."
+		 * @param error - The original error that caused this error to be thrown. Defaults to a generic Error with the publicMessage.
+		 * @param isSentErrorPublic - Whether to send the specified error to the client. Defaults to true.
+		 * @param customErrorMessage - The custom error message to display to the user. Defaults to the publicMessage.
+		 */
 		constructor(
 			publicMessage?: string,
 			error?: Error,
@@ -30,6 +48,12 @@ declare module "@expensio/sharedlib" {
 		);
 	}
 	export class ValidationError extends Error {
+		/**
+		 * @param publicMessage - Public message to display to the user. Defaults to "Validation failed."
+		 * @param error - The original error that caused this error to be thrown. Defaults to a generic Error with the publicMessage.
+		 * @param isSentErrorPublic - Whether to send the specified error to the client. Defaults to true.
+		 * @param customErrorMessage - The custom error message to display to the user. Defaults to the publicMessage.
+		 */
 		constructor(
 			publicMessage?: string,
 			error?: Error,
@@ -38,6 +62,12 @@ declare module "@expensio/sharedlib" {
 		);
 	}
 	export class OtpSendingError extends Error {
+		/**
+		 * @param publicMessage - Public message to display to the user. Defaults to "Error sending OTP."
+		 * @param error - The original error that caused this error to be thrown. Defaults to a generic Error with the publicMessage.
+		 * @param isSentErrorPublic - Whether to send the specified error to the client. Defaults to true.
+		 * @param customErrorMessage - The custom error message to display to the user. Defaults to the publicMessage.
+		 */
 		constructor(
 			publicMessage?: string,
 			error?: Error,
@@ -46,6 +76,12 @@ declare module "@expensio/sharedlib" {
 		);
 	}
 	export class RateLimitError extends Error {
+		/**
+		 * @param publicMessage - Public message to display to the user. Defaults to "Rate Limit exceeded."
+		 * @param error - The original error that caused this error to be thrown. Defaults to a generic Error with the publicMessage.
+		 * @param isSentErrorPublic - Whether to send the specified error to the client. Defaults to true.
+		 * @param customErrorMessage - The custom error message to display to the user. Defaults to the publicMessage.
+		 */
 		constructor(
 			publicMessage?: string,
 			error?: Error,
@@ -54,6 +90,12 @@ declare module "@expensio/sharedlib" {
 		);
 	}
 	export class AuthenticationError extends Error {
+		/**
+		 * @param publicMessage - Public message to display to the user. Defaults to "Authentication failed."
+		 * @param error - The original error that caused this error to be thrown. Defaults to a generic Error with the publicMessage.
+		 * @param isSentErrorPublic - Whether to send the specified error to the client. Defaults to true.
+		 * @param customErrorMessage - The custom error message to display to the user. Defaults to the publicMessage.
+		 */
 		constructor(
 			publicMessage?: string,
 			error?: Error,
@@ -62,6 +104,12 @@ declare module "@expensio/sharedlib" {
 		);
 	}
 	export class InternalServerError extends Error {
+		/**
+		 * @param publicMessage - Public message to display to the user. Defaults to "Internal server error."
+		 * @param error - The original error that caused this error to be thrown. Defaults to a generic Error with the publicMessage.
+		 * @param isSentErrorPublic - Whether to send the specified error to the client. Defaults to true.
+		 * @param customErrorMessage - The custom error message to display to the user. Defaults to the publicMessage.
+		 */
 		constructor(
 			publicMessage?: string,
 			error?: Error,
@@ -77,6 +125,7 @@ declare module "@expensio/sharedlib" {
 		res: any,
 		next: any
 	): void;
+
 	export function authMiddleware(req: any, res: any, next: any): void;
 
 	// Logger
