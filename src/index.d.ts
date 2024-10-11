@@ -2,32 +2,64 @@
 
 declare module "@expensio/sharedlib" {
 	// Errors
-	export class ApplicationError extends Error {
-		constructor(message: string);
-	}
+	// export class ApplicationError extends Error {
+	// 	constructor(message: string);
+	// }
 	export class AuthorizationError extends Error {
-		constructor(message: string);
+		constructor(
+			publicMessage?: string,
+			error?: Error,
+			customErrorMessage?: string
+		);
 	}
 	export class DatabaseError extends Error {
-		constructor(message: string);
+		constructor(
+			publicMessage?: string,
+			error?: Error,
+			customErrorMessage?: string
+		);
 	}
 	export class NotFoundError extends Error {
-		constructor(message: string);
+		constructor(
+			publicMessage?: string,
+			error?: Error,
+			customErrorMessage?: string
+		);
 	}
 	export class ValidationError extends Error {
-		constructor(message: string);
+		constructor(
+			publicMessage?: string,
+			error?: Error,
+			customErrorMessage?: string
+		);
 	}
 	export class OtpSendingError extends Error {
-		constructor(message: string);
+		constructor(
+			publicMessage?: string,
+			error?: Error,
+			customErrorMessage?: string
+		);
 	}
 	export class RateLimitError extends Error {
-		constructor(message: string);
+		constructor(
+			publicMessage?: string,
+			error?: Error,
+			customErrorMessage?: string
+		);
 	}
 	export class AuthenticationError extends Error {
-		constructor(message: string);
+		constructor(
+			publicMessage?: string,
+			error?: Error,
+			customErrorMessage?: string
+		);
 	}
 	export class InternalServerError extends Error {
-		constructor(message: string);
+		constructor(
+			publicMessage?: string,
+			error?: Error,
+			customErrorMessage?: string
+		);
 	}
 
 	// Middlewares
